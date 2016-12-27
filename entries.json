@@ -71,11 +71,6 @@
           "type": "script"
         }
       ]
-    },
-    {
-      "id": "15",
-      "name": "test",
-      "type": "sprite"
     }
   ]
 }

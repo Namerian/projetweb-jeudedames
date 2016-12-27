@@ -2,7 +2,7 @@
   "behaviors": {
     "BoardManagerBehavior": {
       "scriptId": "10",
-      "line": 0,
+      "line": 5,
       "parentBehavior": null,
       "properties": []
     },
