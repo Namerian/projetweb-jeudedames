@@ -1,0 +1,16 @@
+{
+  "behaviors": {
+    "BoardManagerBehavior": {
+      "scriptId": "10",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
+    },
+    "PawnControllerBehavior": {
+      "scriptId": "11",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "nextEntryId": 16,
+  "nodes": [
+    {
+      "id": "1",
+      "name": "GameScene",
+      "type": "scene"
+    },
+    {
+      "id": "2",
+      "name": "BoardTileMap",
+      "type": "tileMap"
+    },
+    {
+      "id": "4",
+      "name": "BoardTileSet",
+      "type": "tileSet"
+    },
+    {
+      "id": "6",
+      "name": "Sprites",
+      "type": null,
+      "children": [
+        {
+          "id": "5",
+          "name": "BlackPawnSprite",
+          "type": "sprite"
+        },
+        {
+          "id": "7",
+          "name": "RedPawnSprite",
+          "type": "sprite"
+        },
+        {
+          "id": "8",
+          "name": "BlackKingSprite",
+          "type": "sprite"
+        },
+        {
+          "id": "9",
+          "name": "RedKingSprite",
+          "type": "sprite"
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "name": "Prefabs",
+      "type": null,
+      "children": [
+        {
+          "id": "12",
+          "name": "PawnPrefab",
+          "type": "scene"
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "name": "Scripts",
+      "type": null,
+      "children": [
+        {
+          "id": "10",
+          "name": "BoardManager",
+          "type": "script"
+        },
+        {
+          "id": "11",
+          "name": "PawnController",
+          "type": "script"
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "name": "test",
+      "type": "sprite"
+    }
+  ]
+}
