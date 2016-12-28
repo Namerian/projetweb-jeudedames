@@ -26,19 +26,20 @@ class BoardManagerBehavior extends Sup.Behavior {
   update() {
     if(Sup.Input.wasMouseButtonJustPressed(0)){
       let mousePos = Sup.Input.getMousePosition();
-      Sup.log("BoardManager:update:mouse clicked! pos="+JSON.stringify(mousePos));
+      //Sup.log("BoardManager:update:mouse clicked! pos="+JSON.stringify(mousePos));
       let mouseWorldPos = this.computeWorldPosFromScreenPos(mousePos);
-      Sup.log("BoardManager:update:mouseWorldPos="+JSON.stringify(mouseWorldPos));
+      //Sup.log("BoardManager:update:mouseWorldPos="+JSON.stringify(mouseWorldPos));
       
       
       if(mouseWorldPos.x >= -5 && mouseWorldPos.x <= 5 && mouseWorldPos.y >= -5 && mouseWorldPos.y <= 5){
         let mousedOverTile = {x:Math.floor(mouseWorldPos.x + 5), y:Math.floor(mouseWorldPos.y + 5)};
         let clickedPiece = this.GetPawnByPos(mousedOverTile);
         
-        Sup.log("clickedPiece.player = "+clickedPiece.player);
-        
         if(clickedPiece !== null && clickedPiece.player === this.currentPlayer){
           this.SelectPiece(clickedPiece);
+        }
+        else{
+          this.DeselectCurrentPiece();
         }
       }
     }
@@ -49,15 +50,19 @@ class BoardManagerBehavior extends Sup.Behavior {
   //======================================================================================
   
   private SelectPiece(piece:PieceControllerBehavior){
-    Sup.log("BoardManager:SelectPiece:called!");
+    //Sup.log("BoardManager:SelectPiece:called!");
     
+    this.DeselectCurrentPiece();
+    
+    this.selectedPiece = piece;
+    this.selectedPiece.selectPiece();
+  }
+  
+  private DeselectCurrentPiece(){
     if(this.selectedPiece != undefined && this.selectedPiece != null){
       this.selectedPiece.deselectPiece();
       this.selectedPiece = null;
     }
-    
-    this.selectedPiece = piece;
-    this.selectedPiece.selectPiece();
   }
   
   //======================================================================================
@@ -65,7 +70,7 @@ class BoardManagerBehavior extends Sup.Behavior {
   //======================================================================================
   
   private GetPawnByPos(pos:Sup.Math.XY) :PieceControllerBehavior{
-    Sup.log("BoardManager:GetPawnByPos:called! pos="+JSON.stringify(pos));
+    //Sup.log("BoardManager:GetPawnByPos:called! pos="+JSON.stringify(pos));
     
     for(let pawn of this.piecesArray){
       if(pawn.position.x === pos.x && pawn.position.y === pos.y){
