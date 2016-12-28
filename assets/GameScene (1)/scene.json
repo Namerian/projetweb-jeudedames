@@ -92,6 +92,39 @@
       "visible": true,
       "layer": 0,
       "prefab": null
+    },
+    {
+      "id": "3",
+      "name": "TurnButton",
+      "children": [],
+      "components": [
+        {
+          "type": "fMouseInput",
+          "config": {
+            "cameraActorName": "Camera"
+          },
+          "id": "0"
+        }
+      ],
+      "position": {
+        "x": 2.557955741882324,
+        "y": -1.4818229675292969,
+        "z": 10
+      },
+      "orientation": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "w": 1
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "visible": true,
+      "layer": 0,
+      "prefab": null
     }
   ]
 }

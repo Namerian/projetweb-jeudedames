@@ -41,17 +41,17 @@ class PieceControllerBehavior extends Sup.Behavior {
   }
   
   public selectPiece(){
+    Sup.log("PieceController:selectPiece:called!");
     if(this.isSelected){
       return;
     }
     
-    let actors = Sup.appendScene("Prefabs/HaloPrefab", this.actor);
+    let actors = Sup.appendScene("Prefabs/FilledHaloPrefab", this.actor);
     if(actors.length === 1 && actors[0].getName() === "Halo"){
       this.halo = actors[0];
     }
     
     this.isSelected = true;
-    Sup.log("Piece selected");
   }
   
   public deselectPiece(){

@@ -1,5 +1,5 @@
 {
-  "nextEntryId": 18,
+  "nextEntryId": 23,
   "nodes": [
     {
       "id": "1",
@@ -43,7 +43,12 @@
         },
         {
           "id": "16",
-          "name": "PieceHalo",
+          "name": "HaloFilled",
+          "type": "sprite"
+        },
+        {
+          "id": "22",
+          "name": "HaloEmpty",
           "type": "sprite"
         }
       ]
@@ -60,7 +65,12 @@
         },
         {
           "id": "17",
-          "name": "HaloPrefab",
+          "name": "FilledHaloPrefab",
+          "type": "scene"
+        },
+        {
+          "id": "21",
+          "name": "EmptyHaloPrefab",
           "type": "scene"
         }
       ]
@@ -79,6 +89,23 @@
           "id": "11",
           "name": "PieceController",
           "type": "script"
+        },
+        {
+          "id": "19",
+          "name": "Actions",
+          "type": null,
+          "children": [
+            {
+              "id": "18",
+              "name": "Action",
+              "type": "script"
+            },
+            {
+              "id": "20",
+              "name": "MoveAction",
+              "type": "script"
+            }
+          ]
         }
       ]
     }
