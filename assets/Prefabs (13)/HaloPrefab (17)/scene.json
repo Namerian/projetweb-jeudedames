@@ -2,15 +2,15 @@
   "formatVersion": 1,
   "nodes": [
     {
-      "id": "2",
-      "name": "Pawn",
+      "id": "0",
+      "name": "Halo",
       "children": [],
       "components": [
         {
           "type": "SpriteRenderer",
           "config": {
             "formatVersion": 1,
-            "spriteAssetId": null,
+            "spriteAssetId": "16",
             "animationId": null,
             "horizontalFlip": false,
             "verticalFlip": false,
@@ -23,20 +23,12 @@
             "shaderAssetId": null
           },
           "id": "0"
-        },
-        {
-          "type": "Behavior",
-          "config": {
-            "behaviorName": "PawnControllerBehavior",
-            "propertyValues": {}
-          },
-          "id": "1"
         }
       ],
       "position": {
         "x": 0,
         "y": 0,
-        "z": 0
+        "z": -0.5
       },
       "orientation": {
         "x": 0,

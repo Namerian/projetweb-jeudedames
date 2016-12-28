@@ -1,5 +1,5 @@
 {
-  "nextEntryId": 16,
+  "nextEntryId": 18,
   "nodes": [
     {
       "id": "1",
@@ -40,6 +40,11 @@
           "id": "9",
           "name": "RedKingSprite",
           "type": "sprite"
+        },
+        {
+          "id": "16",
+          "name": "PieceHalo",
+          "type": "sprite"
         }
       ]
     },
@@ -50,7 +55,12 @@
       "children": [
         {
           "id": "12",
-          "name": "PawnPrefab",
+          "name": "PiecePrefab",
+          "type": "scene"
+        },
+        {
+          "id": "17",
+          "name": "HaloPrefab",
           "type": "scene"
         }
       ]
@@ -67,7 +77,7 @@
         },
         {
           "id": "11",
-          "name": "PawnController",
+          "name": "PieceController",
           "type": "script"
         }
       ]
