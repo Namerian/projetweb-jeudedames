@@ -96,7 +96,49 @@
     {
       "id": "3",
       "name": "TurnButton",
-      "children": [],
+      "children": [
+        {
+          "id": "4",
+          "name": "Text",
+          "children": [],
+          "components": [
+            {
+              "type": "TextRenderer",
+              "config": {
+                "formatVersion": 2,
+                "fontAssetId": "25",
+                "text": "End Turn",
+                "alignment": "center",
+                "verticalAlignment": "center",
+                "size": 42,
+                "color": null,
+                "overrideOpacity": false,
+                "opacity": null
+              },
+              "id": "0"
+            }
+          ],
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+          },
+          "orientation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "visible": true,
+          "layer": 0,
+          "prefab": null
+        }
+      ],
       "components": [
         {
           "type": "fMouseInput",
@@ -104,12 +146,38 @@
             "cameraActorName": "Camera"
           },
           "id": "0"
+        },
+        {
+          "type": "SpriteRenderer",
+          "config": {
+            "formatVersion": 1,
+            "spriteAssetId": "23",
+            "animationId": null,
+            "horizontalFlip": false,
+            "verticalFlip": false,
+            "castShadow": false,
+            "receiveShadow": false,
+            "color": "ffffff",
+            "overrideOpacity": false,
+            "opacity": null,
+            "materialType": "basic",
+            "shaderAssetId": null
+          },
+          "id": "1"
+        },
+        {
+          "type": "Behavior",
+          "config": {
+            "behaviorName": "EndTurnButtonBehavior",
+            "propertyValues": {}
+          },
+          "id": "2"
         }
       ],
       "position": {
-        "x": 2.557955741882324,
-        "y": -1.4818229675292969,
-        "z": 10
+        "x": 6.5,
+        "y": 0,
+        "z": 0
       },
       "orientation": {
         "x": 0,

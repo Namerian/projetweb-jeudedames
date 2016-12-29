@@ -1,12 +1,10 @@
 class MoveAction extends Action {
-  destination: Sup.Math.XY;
   isVisible: boolean;
   isSelected: boolean;
   halo: Sup.Actor;
 
   constructor(type: ActionType, piece: PieceControllerBehavior, destination: Sup.Math.XY){
-    super(type, piece);
-    this.destination = destination;
+    super(type, piece, destination);
     
     this.isVisible = false;
     this.isSelected = false;

@@ -78,15 +78,21 @@ class BoardManagerBehavior extends Sup.Behavior {
   }
   
   //======================================================================================
+  //======================================================================================
   // gameflow methods
   //======================================================================================
+  //======================================================================================
   
+  
+  // START TURN
   private startTurn(playerName: PlayerName){
-    this.currentPlayer = playerName;
+    this.playerPossibleMoveActions = null;
     
+    this.currentPlayer = playerName;
     this.playerPossibleMoveActions = this.computePossibleMoveActions(this.currentPlayer);
   }
   
+  // SELECT PIECE
   private SelectPiece(piece:PieceControllerBehavior){
     Sup.log("BoardManager:SelectPiece:called!");
     this.DeselectCurrentPiece();
@@ -107,6 +113,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.pieceSelectedAction = null;
   }
   
+  // DESELECT CURRENT PIECE
   private DeselectCurrentPiece(){
     if(this.selectedPiece !== null){
       this.selectedPiece.deselectPiece();
@@ -118,6 +125,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     }
   }
   
+  // SELECT ACTION
   private selectAction(selectedAction: Action){
     for(let moveAction of this.piecePossibleMoveActions){
       moveAction.hide();
@@ -127,8 +135,23 @@ class BoardManagerBehavior extends Sup.Behavior {
     selectedAction.select();
   }
   
+  // ON END TURN BUTTON PRESSED
+  public onEndTurnButtonPressed(){
+    Sup.log("BoardManager:onEndTurnButtonPressed:called!");
+    
+    if(this.selectedPiece !== null && this.pieceSelectedAction !== null){
+      this.selectedPiece.deselectPiece();
+      this.pieceSelectedAction.hide();
+      this.selectedPiece.move(this.pieceSelectedAction.destination);
+      
+      this.startTurn(this.getOtherPlayer(this.currentPlayer));
+    }
+  }
+  
+  //======================================================================================
   //======================================================================================
   // helper methods
+  //======================================================================================
   //======================================================================================
   
   private computePossibleMoveActions(playerName: PlayerName) :MoveAction[]{
@@ -215,12 +238,25 @@ class BoardManagerBehavior extends Sup.Behavior {
     return false;
   }
   
+  private getOtherPlayer(player: PlayerName) :PlayerName{
+    if(player === PlayerName.Black){
+      return PlayerName.Red;
+    }
+    else if(player === PlayerName.Red){
+      return PlayerName.Black;
+    }
+  }
+  
+  //======================================================================================
   //======================================================================================
   // initialization methods
+  //======================================================================================
   //======================================================================================
   
   private SetupGame(){
     this.CreatePawn(PlayerName.Red, {x:2, y:0});
+    
+    this.CreatePawn(PlayerName.Black, {x:1, y:9});
   }
   
   private CreatePawn(playerName:PlayerName, tilePosition:Sup.Math.XY){
@@ -233,7 +269,9 @@ class BoardManagerBehavior extends Sup.Behavior {
   }
   
   //======================================================================================
+  //======================================================================================
   //
+  //======================================================================================
   //======================================================================================
   
   public createEmptyHalo(tilePos: Sup.Math.XY) :Sup.Actor{
@@ -247,5 +285,11 @@ class BoardManagerBehavior extends Sup.Behavior {
     actors[0].setLocalPosition({x:tilePos.x + 0.5, y:tilePos.y + 0.5, z:0.5});
     return actors[0];
   }
+  
+  //======================================================================================
+  //
+  //======================================================================================
+  
+  
 }
 Sup.registerBehavior(BoardManagerBehavior);

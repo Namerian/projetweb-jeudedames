@@ -1,5 +1,5 @@
 {
-  "nextEntryId": 23,
+  "nextEntryId": 27,
   "nodes": [
     {
       "id": "1",
@@ -50,6 +50,11 @@
           "id": "22",
           "name": "HaloEmpty",
           "type": "sprite"
+        },
+        {
+          "id": "23",
+          "name": "ButtonSprite",
+          "type": "sprite"
         }
       ]
     },
@@ -91,6 +96,11 @@
           "type": "script"
         },
         {
+          "id": "26",
+          "name": "EndTurnButton",
+          "type": "script"
+        },
+        {
           "id": "19",
           "name": "Actions",
           "type": null,
@@ -106,6 +116,18 @@
               "type": "script"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "24",
+      "name": "Fonts",
+      "type": null,
+      "children": [
+        {
+          "id": "25",
+          "name": "Clairsans-Light",
+          "type": "font"
         }
       ]
     }

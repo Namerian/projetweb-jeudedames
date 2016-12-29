@@ -7,13 +7,13 @@ class PieceControllerBehavior extends Sup.Behavior {
   isSelected :boolean;
   halo :Sup.Actor;
   
-  awake() {
+  /*awake() {
     
-  }
+  }*/
 
-  update() {
+  /*update() {
     
-  }
+  }*/
   
   public initialize(player:PlayerName, boardPos:Sup.Math.XY){
     this.player = player;
@@ -38,6 +38,11 @@ class PieceControllerBehavior extends Sup.Behavior {
     }
     
     this.actor.spriteRenderer.setSprite(spriteName);
+  }
+  
+  public move(boardPos: Sup.Math.XY){
+    this.position = boardPos;
+    this.actor.setLocalPosition({x:boardPos.x + 0.5, y:boardPos.y + 0.5});
   }
   
   public selectPiece(){

@@ -24,6 +24,12 @@
           "type": "boolean"
         }
       ]
+    },
+    "EndTurnButtonBehavior": {
+      "scriptId": "26",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
     }
   }
 }
