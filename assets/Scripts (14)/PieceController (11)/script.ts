@@ -7,14 +7,6 @@ class PieceControllerBehavior extends Sup.Behavior {
   isSelected :boolean;
   halo :Sup.Actor;
   
-  /*awake() {
-    
-  }*/
-
-  /*update() {
-    
-  }*/
-  
   public initialize(player:PlayerName, boardPos:Sup.Math.XY){
     this.player = player;
     this.position = {x:boardPos.x, y:boardPos.y};
@@ -46,7 +38,7 @@ class PieceControllerBehavior extends Sup.Behavior {
   }
   
   public selectPiece(){
-    Sup.log("PieceController:selectPiece:called!");
+    //Sup.log("PieceController:selectPiece:called!");
     if(this.isSelected){
       return;
     }

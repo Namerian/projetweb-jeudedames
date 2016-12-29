@@ -11,11 +11,17 @@ class BoardManagerBehavior extends Sup.Behavior {
   piecesArray :PieceControllerBehavior[];
   
   currentPlayer :PlayerName;
-  playerPossibleMoveActions :MoveAction[];
+  playerPossibleMoveActions :Action[];
   
   selectedPiece :PieceControllerBehavior;
-  piecePossibleMoveActions :MoveAction[];
+  piecePossibleMoveActions :Action[];
   pieceSelectedAction :Action;
+  
+  //======================================================================================
+  //======================================================================================
+  // behaviour methods
+  //======================================================================================
+  //======================================================================================
   
   awake() {
     BoardManagerBehavior.instance = this;
@@ -34,47 +40,11 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   start(){
     this.camera = Sup.getActor("Camera").camera;
+    this.actor.fMouseInput.emitter.on("leftClickReleased", () => { this.onClickOnBoard(); });
     
     this.SetupGame();
     
     this.startTurn(PlayerName.Red);
-  }
-
-  update() {
-    if(Sup.Input.wasMouseButtonJustPressed(0)){
-      let mousePos = Sup.Input.getMousePosition();
-      //Sup.log("BoardManager:update:mouse clicked! pos="+JSON.stringify(mousePos));
-      let mouseWorldPos = this.computeWorldPosFromScreenPos(mousePos);
-      //Sup.log("BoardManager:update:mouseWorldPos="+JSON.stringify(mouseWorldPos));
-      
-      
-      if(mouseWorldPos.x >= -5 && mouseWorldPos.x <= 5 && mouseWorldPos.y >= -5 && mouseWorldPos.y <= 5){
-        let mousedOverTile = {x:Math.floor(mouseWorldPos.x + 5), y:Math.floor(mouseWorldPos.y + 5)};
-        let clickedPiece = this.GetPawnByPos(mousedOverTile);
-        let clickedDestinationAction = null;
-        
-        if(this.selectedPiece !== null && this.piecePossibleMoveActions.length > 0){
-          for(let moveAction of this.piecePossibleMoveActions){
-            if(moveAction.destination.x === mousedOverTile.x && moveAction.destination.y === mousedOverTile.y){
-              clickedDestinationAction = moveAction;
-              Sup.log("BoardManager:update:found move destination on clicked tile!");
-              break;
-            }
-          }
-        }
-        
-        if(clickedPiece !== null && clickedPiece.player === this.currentPlayer){
-          this.SelectPiece(clickedPiece);
-        }
-        else if(clickedDestinationAction !== null){
-          Sup.log("BoardManager:update:click on move destination! pos="+JSON.stringify(clickedDestinationAction.destination));
-          this.selectAction(clickedDestinationAction);           
-        }
-        else{
-          this.DeselectCurrentPiece();
-        }
-      }
-    }
   }
   
   //======================================================================================
@@ -86,6 +56,7 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   // START TURN
   private startTurn(playerName: PlayerName){
+    this.DeselectCurrentPiece();
     this.playerPossibleMoveActions = null;
     
     this.currentPlayer = playerName;
@@ -94,13 +65,13 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   // SELECT PIECE
   private SelectPiece(piece:PieceControllerBehavior){
-    Sup.log("BoardManager:SelectPiece:called!");
+    //Sup.log("BoardManager:SelectPiece:called!");
     this.DeselectCurrentPiece();
     
     this.selectedPiece = piece;
     this.selectedPiece.selectPiece();
     
-    this.piecePossibleMoveActions = new Array<MoveAction>();
+    this.piecePossibleMoveActions = new Array<Action>();
     for(let moveAction of this.playerPossibleMoveActions){
       //Sup.log("BoardManager:SelectPiece:piecePos="+JSON.stringify(piece.position)+" moveActionPiecePos="+JSON.stringify(moveAction.piece.position));
       if(moveAction.piece === piece){
@@ -108,7 +79,7 @@ class BoardManagerBehavior extends Sup.Behavior {
         moveAction.show();
       }
     }
-    Sup.log("BoardManager:SelectPiece:numOfPossibleMoves="+this.piecePossibleMoveActions.length);
+    //Sup.log("BoardManager:SelectPiece:numOfPossibleMoves="+this.piecePossibleMoveActions.length);
     
     this.pieceSelectedAction = null;
   }
@@ -137,7 +108,7 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   // ON END TURN BUTTON PRESSED
   public onEndTurnButtonPressed(){
-    Sup.log("BoardManager:onEndTurnButtonPressed:called!");
+    //Sup.log("BoardManager:onEndTurnButtonPressed:called!");
     
     if(this.selectedPiece !== null && this.pieceSelectedAction !== null){
       this.selectedPiece.deselectPiece();
@@ -148,14 +119,50 @@ class BoardManagerBehavior extends Sup.Behavior {
     }
   }
   
+  // ON CLICK ON BOARD
+  public onClickOnBoard(){
+    //Sup.log("BoardManager:onClickOnBoard:called!");
+    
+    let mousePos = Sup.Input.getMousePosition();
+    //Sup.log("BoardManager:update:mouse clicked! pos="+JSON.stringify(mousePos));
+    let mouseWorldPos = this.computeWorldPosFromScreenPos(mousePos);
+    //Sup.log("BoardManager:update:mouseWorldPos="+JSON.stringify(mouseWorldPos));
+
+
+    let mousedOverTile = {x:Math.floor(mouseWorldPos.x + 5), y:Math.floor(mouseWorldPos.y + 5)};
+    let clickedPiece = this.GetPawnByPos(mousedOverTile);
+    let clickedDestinationAction = null;
+
+    if(this.selectedPiece !== null && this.piecePossibleMoveActions.length > 0){
+      for(let moveAction of this.piecePossibleMoveActions){
+        if(moveAction.destination.x === mousedOverTile.x && moveAction.destination.y === mousedOverTile.y){
+          clickedDestinationAction = moveAction;
+          //Sup.log("BoardManager:update:found move destination on clicked tile!");
+          break;
+        }
+      }
+    }
+
+    if(clickedPiece !== null && clickedPiece.player === this.currentPlayer){
+      this.SelectPiece(clickedPiece);
+    }
+    else if(clickedDestinationAction !== null){
+      //Sup.log("BoardManager:update:click on move destination! pos="+JSON.stringify(clickedDestinationAction.destination));
+      this.selectAction(clickedDestinationAction);           
+    }
+    else{
+      this.DeselectCurrentPiece();
+    }
+  }
+  
   //======================================================================================
   //======================================================================================
   // helper methods
   //======================================================================================
   //======================================================================================
   
-  private computePossibleMoveActions(playerName: PlayerName) :MoveAction[]{
-    let result = new Array<MoveAction>();
+  private computePossibleMoveActions(playerName: PlayerName) :Action[]{
+    let result = new Array<Action>();
     
     for(let piece of this.piecesArray){
       if(piece.player === playerName){
@@ -167,16 +174,16 @@ class BoardManagerBehavior extends Sup.Behavior {
       }
     }
     
-    Sup.log("BoardManager:computePossibleMoveActions:numOfPossibleMoves="+result.length);
+    //Sup.log("BoardManager:computePossibleMoveActions:numOfPossibleMoves="+result.length);
     return result;
   }
   
-  private computePossibleMovesForPiece(piece: PieceControllerBehavior) :MoveAction[]{
+  private computePossibleMovesForPiece(piece: PieceControllerBehavior) :Action[]{
     //Sup.log("BoardManager:computePossibleMoves:called!")
     const redPossibleDeltas = [{x:-1,y:1}, {x:1,y:1}];
     const blackPossibleDeltas = [{x:-1,y:-1}, {x:1,y:-1}];
     
-    let result = new Array<MoveAction>();
+    let result = new Array<Action>();
     let deltas;
     let piecePos = piece.position;
     
@@ -191,11 +198,11 @@ class BoardManagerBehavior extends Sup.Behavior {
       let possiblePos = {x:piecePos.x + deltas[i].x, y:piecePos.y + deltas[i].y};
       
       if(this.isPosLegal(possiblePos) && this.isTileEmpty(possiblePos)){
-        result.push(new MoveAction(ActionType.Move, piece, possiblePos));
+        result.push(new Action(ActionType.Move, piece, possiblePos));
       }
     }
     
-    Sup.log("BoardManager:computePossibleMoves:piecePos="+JSON.stringify(piecePos)+" numOfPossibleMoves="+result.length);
+    //Sup.log("BoardManager:computePossibleMoves:piecePos="+JSON.stringify(piecePos)+" numOfPossibleMoves="+result.length);
     return result;
   }
   

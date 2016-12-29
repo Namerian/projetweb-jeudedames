@@ -26,6 +26,13 @@
             "propertyValues": {}
           },
           "id": "1"
+        },
+        {
+          "type": "fMouseInput",
+          "config": {
+            "cameraActorName": "Camera"
+          },
+          "id": "2"
         }
       ],
       "position": {
@@ -94,34 +101,188 @@
       "prefab": null
     },
     {
-      "id": "3",
-      "name": "TurnButton",
+      "id": "5",
+      "name": "UI",
       "children": [
         {
-          "id": "4",
-          "name": "Text",
-          "children": [],
+          "id": "3",
+          "name": "TurnButton",
+          "children": [
+            {
+              "id": "4",
+              "name": "Text",
+              "children": [],
+              "components": [
+                {
+                  "type": "TextRenderer",
+                  "config": {
+                    "formatVersion": 2,
+                    "fontAssetId": "25",
+                    "text": "End Turn",
+                    "alignment": "center",
+                    "verticalAlignment": "center",
+                    "size": 42,
+                    "color": null,
+                    "overrideOpacity": false,
+                    "opacity": null
+                  },
+                  "id": "0"
+                }
+              ],
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+              },
+              "orientation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "visible": true,
+              "layer": 0,
+              "prefab": null
+            }
+          ],
           "components": [
             {
-              "type": "TextRenderer",
+              "type": "fMouseInput",
               "config": {
-                "formatVersion": 2,
-                "fontAssetId": "25",
-                "text": "End Turn",
-                "alignment": "center",
-                "verticalAlignment": "center",
-                "size": 42,
-                "color": null,
+                "cameraActorName": "Camera"
+              },
+              "id": "0"
+            },
+            {
+              "type": "SpriteRenderer",
+              "config": {
+                "formatVersion": 1,
+                "spriteAssetId": "23",
+                "animationId": null,
+                "horizontalFlip": false,
+                "verticalFlip": false,
+                "castShadow": false,
+                "receiveShadow": false,
+                "color": "ffffff",
                 "overrideOpacity": false,
-                "opacity": null
+                "opacity": null,
+                "materialType": "basic",
+                "shaderAssetId": null
+              },
+              "id": "1"
+            },
+            {
+              "type": "Behavior",
+              "config": {
+                "behaviorName": "EndTurnButtonBehavior",
+                "propertyValues": {}
+              },
+              "id": "2"
+            }
+          ],
+          "position": {
+            "x": 6.5,
+            "y": 0,
+            "z": 0
+          },
+          "orientation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "visible": true,
+          "layer": 0,
+          "prefab": null
+        },
+        {
+          "id": "6",
+          "name": "CurrentPlayer",
+          "children": [
+            {
+              "id": "7",
+              "name": "Text",
+              "children": [],
+              "components": [
+                {
+                  "type": "TextRenderer",
+                  "config": {
+                    "formatVersion": 2,
+                    "fontAssetId": "25",
+                    "text": "Player: Red",
+                    "alignment": "center",
+                    "verticalAlignment": "center",
+                    "size": null,
+                    "color": null,
+                    "overrideOpacity": false,
+                    "opacity": null
+                  },
+                  "id": "0"
+                },
+                {
+                  "type": "Behavior",
+                  "config": {
+                    "behaviorName": "CurrentPlayerViewBehavior",
+                    "propertyValues": {}
+                  },
+                  "id": "1"
+                }
+              ],
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0.5
+              },
+              "orientation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "visible": true,
+              "layer": 0,
+              "prefab": null
+            }
+          ],
+          "components": [
+            {
+              "type": "SpriteRenderer",
+              "config": {
+                "formatVersion": 1,
+                "spriteAssetId": null,
+                "animationId": null,
+                "horizontalFlip": false,
+                "verticalFlip": false,
+                "castShadow": false,
+                "receiveShadow": false,
+                "color": "ffffff",
+                "overrideOpacity": false,
+                "opacity": null,
+                "materialType": "basic",
+                "shaderAssetId": null
               },
               "id": "0"
             }
           ],
           "position": {
-            "x": 0,
-            "y": 0,
-            "z": 1
+            "x": -7,
+            "y": 4,
+            "z": 0
           },
           "orientation": {
             "x": 0,
@@ -139,43 +300,9 @@
           "prefab": null
         }
       ],
-      "components": [
-        {
-          "type": "fMouseInput",
-          "config": {
-            "cameraActorName": "Camera"
-          },
-          "id": "0"
-        },
-        {
-          "type": "SpriteRenderer",
-          "config": {
-            "formatVersion": 1,
-            "spriteAssetId": "23",
-            "animationId": null,
-            "horizontalFlip": false,
-            "verticalFlip": false,
-            "castShadow": false,
-            "receiveShadow": false,
-            "color": "ffffff",
-            "overrideOpacity": false,
-            "opacity": null,
-            "materialType": "basic",
-            "shaderAssetId": null
-          },
-          "id": "1"
-        },
-        {
-          "type": "Behavior",
-          "config": {
-            "behaviorName": "EndTurnButtonBehavior",
-            "propertyValues": {}
-          },
-          "id": "2"
-        }
-      ],
+      "components": [],
       "position": {
-        "x": 6.5,
+        "x": 0,
         "y": 0,
         "z": 0
       },

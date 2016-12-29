@@ -1,5 +1,5 @@
 {
-  "nextEntryId": 27,
+  "nextEntryId": 28,
   "nodes": [
     {
       "id": "1",
@@ -101,21 +101,14 @@
           "type": "script"
         },
         {
-          "id": "19",
-          "name": "Actions",
-          "type": null,
-          "children": [
-            {
-              "id": "18",
-              "name": "Action",
-              "type": "script"
-            },
-            {
-              "id": "20",
-              "name": "MoveAction",
-              "type": "script"
-            }
-          ]
+          "id": "18",
+          "name": "Action",
+          "type": "script"
+        },
+        {
+          "id": "27",
+          "name": "CurrentPlayerView",
+          "type": "script"
         }
       ]
     },

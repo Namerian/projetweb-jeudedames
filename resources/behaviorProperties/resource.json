@@ -30,6 +30,12 @@
       "line": 0,
       "parentBehavior": null,
       "properties": []
+    },
+    "CurrentPlayerViewBehavior": {
+      "scriptId": "27",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
     }
   }
 }
