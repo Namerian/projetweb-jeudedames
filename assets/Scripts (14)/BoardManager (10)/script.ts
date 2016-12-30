@@ -20,10 +20,13 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   isPieceSelected: boolean;
   selectedPiece: PieceControllerBehavior;
-  piecePossibleMoveActions: Action[];
+  
+  possibleActions: Action[];
+  possibleActionHalos: Sup.Actor[];
   
   isActionSelected: boolean;
   selectedAction: Action;
+  selectedActionHalo: Sup.Actor;
   
   //======================================================================================
   //======================================================================================
@@ -43,10 +46,13 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     this.isPieceSelected = false;
     this.selectedPiece =null;
-    this.piecePossibleMoveActions = null;
+    
+    this.possibleActions = null;
+    this.possibleActionHalos = null;
     
     this.isActionSelected = false;
     this.selectedAction = null;
+    this.selectedActionHalo = null;
   }
   
   start(){
@@ -84,14 +90,17 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.selectedPiece.selectPiece();
     this.isPieceSelected = true;
     
-    this.piecePossibleMoveActions = new Array<Action>();
+    this.possibleActions = new Array<Action>();
+    
     for(let moveAction of this.playerPossibleMoveActions){
       //Sup.log("BoardManager:SelectPiece:piecePos="+JSON.stringify(piece.position)+" moveActionPiecePos="+JSON.stringify(moveAction.piece.position));
       if(moveAction.piece === piece){
-        this.piecePossibleMoveActions.push(moveAction);
-        moveAction.show();
+        this.possibleActions.push(moveAction);
       }
     }
+    
+    this.possibleActionHalos = this.createEmptyHalos(this.possibleActions);
+    
     //Sup.log("BoardManager:SelectPiece:numOfPossibleMoves="+this.piecePossibleMoveActions.length);
     
     this.selectedAction = null;
@@ -102,24 +111,22 @@ class BoardManagerBehavior extends Sup.Behavior {
   private DeselectCurrentPiece(){
     if(this.isPieceSelected){
       this.selectedPiece.deselectPiece();
-      
-      for(let moveAction of this.piecePossibleMoveActions){
-        moveAction.hide();
-      }
-      
       this.selectedPiece = null;
+      
+      this.destroyActors(this.possibleActionHalos);
+      this.possibleActionHalos = null;
+      
       this.isPieceSelected = false;
     }
   }
   
   // SELECT ACTION
-  private selectAction(selectedAction: Action){
-    for(let moveAction of this.piecePossibleMoveActions){
-      moveAction.hide();
-    }
+  private selectAction(action: Action){
+    this.destroyActors(this.possibleActionHalos);
+    this.possibleActionHalos = null;
     
-    this.selectedAction = selectedAction;
-    selectedAction.select();
+    this.selectedAction = action;
+    this.selectedActionHalo = this.createFilledHalo(this.selectedAction.destination);
     this.isActionSelected = true;
   }
   
@@ -129,7 +136,9 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     if(this.isPieceSelected && this.isActionSelected){
       this.selectedPiece.deselectPiece();
-      this.selectedAction.hide();
+      this.selectedActionHalo.destroy();
+      this.selectedActionHalo = null;
+      
       this.selectedPiece.move(this.selectedAction.destination);
       
       this.startTurn(this.getOtherPlayer(this.currentPlayer));
@@ -149,8 +158,8 @@ class BoardManagerBehavior extends Sup.Behavior {
     let clickedPiece = this.GetPawnByPos(mousedOverTile);
     let clickedDestinationAction = null;
 
-    if(this.isPieceSelected && this.piecePossibleMoveActions.length > 0){
-      for(let moveAction of this.piecePossibleMoveActions){
+    if(this.isPieceSelected && this.possibleActions.length > 0){
+      for(let moveAction of this.possibleActions){
         if(moveAction.destination.x === mousedOverTile.x && moveAction.destination.y === mousedOverTile.y){
           clickedDestinationAction = moveAction;
           //Sup.log("BoardManager:update:found move destination on clicked tile!");
@@ -297,22 +306,36 @@ class BoardManagerBehavior extends Sup.Behavior {
   //======================================================================================
   //======================================================================================
   
-  public createEmptyHalo(tilePos: Sup.Math.XY) :Sup.Actor{
+  private createEmptyHalos(actions: Action[]) :Sup.Actor[]{
+    let result = new Array<Sup.Actor>();
+    
+    for(let action of actions){
+      result.push(this.createEmptyHalo(action.destination));
+    }
+    
+    return result;
+  }
+  
+  private createEmptyHalo(tilePos: Sup.Math.XY) :Sup.Actor{
     let actors = Sup.appendScene("Prefabs/EmptyHaloPrefab", this.actor);
     actors[0].setLocalPosition({x:tilePos.x + 0.5, y:tilePos.y + 0.5, z:0.5});
     return actors[0];
   }
   
-  public createFilledHalo(tilePos: Sup.Math.XY) :Sup.Actor{
+  private createFilledHalo(tilePos: Sup.Math.XY) :Sup.Actor{
     let actors = Sup.appendScene("Prefabs/FilledHaloPrefab", this.actor);
     actors[0].setLocalPosition({x:tilePos.x + 0.5, y:tilePos.y + 0.5, z:0.5});
     return actors[0];
   }
   
-  //======================================================================================
-  //
-  //======================================================================================
-  
-  
+  private destroyActors(actors: Sup.Actor[]){
+    if(actors === null){
+      return;
+    }
+    
+    for(let actor of actors){
+      actor.destroy();
+    }
+  }
 }
 Sup.registerBehavior(BoardManagerBehavior);
