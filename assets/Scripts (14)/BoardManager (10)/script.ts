@@ -6,16 +6,24 @@ enum PlayerName{
 class BoardManagerBehavior extends Sup.Behavior {
   static instance: BoardManagerBehavior;
   
-  camera :Sup.Camera;
+  //=====================
   
-  piecesArray :PieceControllerBehavior[];
+  camera: Sup.Camera;
+  currentPlayerView: CurrentPlayerViewBehavior;
   
-  currentPlayer :PlayerName;
-  playerPossibleMoveActions :Action[];
+  //=====================
   
-  selectedPiece :PieceControllerBehavior;
-  piecePossibleMoveActions :Action[];
-  pieceSelectedAction :Action;
+  piecesArray: PieceControllerBehavior[];
+  
+  currentPlayer: PlayerName;
+  playerPossibleMoveActions: Action[];
+  
+  isPieceSelected: boolean;
+  selectedPiece: PieceControllerBehavior;
+  piecePossibleMoveActions: Action[];
+  
+  isActionSelected: boolean;
+  selectedAction: Action;
   
   //======================================================================================
   //======================================================================================
@@ -33,9 +41,12 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.currentPlayer = null;
     this.playerPossibleMoveActions = null;
     
+    this.isPieceSelected = false;
     this.selectedPiece =null;
     this.piecePossibleMoveActions = null;
-    this.pieceSelectedAction = null;
+    
+    this.isActionSelected = false;
+    this.selectedAction = null;
   }
   
   start(){
@@ -60,6 +71,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.playerPossibleMoveActions = null;
     
     this.currentPlayer = playerName;
+    this.currentPlayerView.setText(this.currentPlayer);
     this.playerPossibleMoveActions = this.computePossibleMoveActions(this.currentPlayer);
   }
   
@@ -70,6 +82,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     this.selectedPiece = piece;
     this.selectedPiece.selectPiece();
+    this.isPieceSelected = true;
     
     this.piecePossibleMoveActions = new Array<Action>();
     for(let moveAction of this.playerPossibleMoveActions){
@@ -81,18 +94,21 @@ class BoardManagerBehavior extends Sup.Behavior {
     }
     //Sup.log("BoardManager:SelectPiece:numOfPossibleMoves="+this.piecePossibleMoveActions.length);
     
-    this.pieceSelectedAction = null;
+    this.selectedAction = null;
+    this.isActionSelected = false;
   }
   
   // DESELECT CURRENT PIECE
   private DeselectCurrentPiece(){
-    if(this.selectedPiece !== null){
+    if(this.isPieceSelected){
       this.selectedPiece.deselectPiece();
-      this.selectedPiece = null;
       
       for(let moveAction of this.piecePossibleMoveActions){
         moveAction.hide();
       }
+      
+      this.selectedPiece = null;
+      this.isPieceSelected = false;
     }
   }
   
@@ -102,18 +118,19 @@ class BoardManagerBehavior extends Sup.Behavior {
       moveAction.hide();
     }
     
-    this.pieceSelectedAction = selectedAction;
+    this.selectedAction = selectedAction;
     selectedAction.select();
+    this.isActionSelected = true;
   }
   
   // ON END TURN BUTTON PRESSED
   public onEndTurnButtonPressed(){
     //Sup.log("BoardManager:onEndTurnButtonPressed:called!");
     
-    if(this.selectedPiece !== null && this.pieceSelectedAction !== null){
+    if(this.isPieceSelected && this.isActionSelected){
       this.selectedPiece.deselectPiece();
-      this.pieceSelectedAction.hide();
-      this.selectedPiece.move(this.pieceSelectedAction.destination);
+      this.selectedAction.hide();
+      this.selectedPiece.move(this.selectedAction.destination);
       
       this.startTurn(this.getOtherPlayer(this.currentPlayer));
     }
@@ -127,13 +144,12 @@ class BoardManagerBehavior extends Sup.Behavior {
     //Sup.log("BoardManager:update:mouse clicked! pos="+JSON.stringify(mousePos));
     let mouseWorldPos = this.computeWorldPosFromScreenPos(mousePos);
     //Sup.log("BoardManager:update:mouseWorldPos="+JSON.stringify(mouseWorldPos));
-
-
     let mousedOverTile = {x:Math.floor(mouseWorldPos.x + 5), y:Math.floor(mouseWorldPos.y + 5)};
+    
     let clickedPiece = this.GetPawnByPos(mousedOverTile);
     let clickedDestinationAction = null;
 
-    if(this.selectedPiece !== null && this.piecePossibleMoveActions.length > 0){
+    if(this.isPieceSelected && this.piecePossibleMoveActions.length > 0){
       for(let moveAction of this.piecePossibleMoveActions){
         if(moveAction.destination.x === mousedOverTile.x && moveAction.destination.y === mousedOverTile.y){
           clickedDestinationAction = moveAction;
@@ -238,7 +254,7 @@ class BoardManagerBehavior extends Sup.Behavior {
   }
   
   private isPosLegal(pos: Sup.Math.XY) :boolean{
-    if(pos.x >= 0 && pos.x < 9 && pos.y >= 0 && pos.y < 9){
+    if(pos.x >= 0 && pos.x <= 9 && pos.y >= 0 && pos.y <= 9){
       return true;
     }
     
