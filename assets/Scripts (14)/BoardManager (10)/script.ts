@@ -160,6 +160,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     }
   }
   
+  //**************
   // SELECT ACTION
   private selectAction(action: Action){
     //this.destroyActors(this.possibleActionHalos);
@@ -172,6 +173,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.isActionSelected = true;
   }
   
+  //***************************
   // ON END TURN BUTTON PRESSED
   public onEndTurnButtonPressed(){
     //Sup.log("BoardManager:onEndTurnButtonPressed:called!");
@@ -192,6 +194,9 @@ class BoardManagerBehavior extends Sup.Behavior {
         this.selectedPiece.move(this.selectedAction.destination);
       }
       
+      if(this.selectedPiece.player === PlayerName.Black && this.selectedPiece.position.y === 0){
+        
+      }
       
       this.DeselectCurrentPiece();
       this.startTurn(this.getOtherPlayer(this.currentPlayer));
