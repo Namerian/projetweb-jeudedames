@@ -33,6 +33,14 @@
             "cameraActorName": "Camera"
           },
           "id": "2"
+        },
+        {
+          "type": "Behavior",
+          "config": {
+            "behaviorName": "HaloManagerBehavior",
+            "propertyValues": {}
+          },
+          "id": "3"
         }
       ],
       "position": {

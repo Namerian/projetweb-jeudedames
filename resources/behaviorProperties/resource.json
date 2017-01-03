@@ -45,6 +45,12 @@
       "line": 0,
       "parentBehavior": null,
       "properties": []
+    },
+    "HaloManagerBehavior": {
+      "scriptId": "30",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
     }
   }
 }

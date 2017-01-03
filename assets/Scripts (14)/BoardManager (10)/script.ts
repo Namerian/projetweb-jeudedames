@@ -16,17 +16,17 @@ class BoardManagerBehavior extends Sup.Behavior {
   piecesArray: PieceControllerBehavior[];
   
   currentPlayer: PlayerName;
-  playerPossibleMoveActions: Action[];
+  playerPossibleActions: Action[];
   
   isPieceSelected: boolean;
   selectedPiece: PieceControllerBehavior;
   
   possibleActions: Action[];
-  possibleActionHalos: Sup.Actor[];
+  //possibleActionHalos: Sup.Actor[];
   
   isActionSelected: boolean;
   selectedAction: Action;
-  selectedActionHalo: Sup.Actor;
+  //selectedActionHalo: Sup.Actor;
   
   //======================================================================================
   //======================================================================================
@@ -42,17 +42,17 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.piecesArray = new Array<PieceControllerBehavior>();
     
     this.currentPlayer = null;
-    this.playerPossibleMoveActions = null;
+    this.playerPossibleActions = null;
     
     this.isPieceSelected = false;
     this.selectedPiece =null;
     
     this.possibleActions = null;
-    this.possibleActionHalos = null;
+    //this.possibleActionHalos = null;
     
     this.isActionSelected = false;
     this.selectedAction = null;
-    this.selectedActionHalo = null;
+    //this.selectedActionHalo = null;
   }
   
   start(){
@@ -73,12 +73,19 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   // START TURN
   private startTurn(playerName: PlayerName){
-    this.DeselectCurrentPiece();
-    this.playerPossibleMoveActions = null;
+    //this.DeselectCurrentPiece();
+    this.playerPossibleActions = null;
     
     this.currentPlayer = playerName;
     this.currentPlayerView.setText(this.currentPlayer);
-    this.playerPossibleMoveActions = this.computePossibleMoveActions(this.currentPlayer);
+    
+    this.playerPossibleActions = this.computePossibleTakeActions(this.currentPlayer);
+    
+    if(this.playerPossibleActions.length === 0){
+      this.playerPossibleActions = this.computePossibleMoveActions(this.currentPlayer);
+    }
+    
+    
   }
   
   // SELECT PIECE
@@ -92,14 +99,15 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     this.possibleActions = new Array<Action>();
     
-    for(let moveAction of this.playerPossibleMoveActions){
+    for(let action of this.playerPossibleActions){
       //Sup.log("BoardManager:SelectPiece:piecePos="+JSON.stringify(piece.position)+" moveActionPiecePos="+JSON.stringify(moveAction.piece.position));
-      if(moveAction.piece === piece){
-        this.possibleActions.push(moveAction);
+      if(action.piece === piece){
+        this.possibleActions.push(action);
       }
     }
     
-    this.possibleActionHalos = this.createEmptyHalos(this.possibleActions);
+    //this.possibleActionHalos = this.createEmptyHalos(this.possibleActions);
+    HaloManagerBehavior.instance.createPossibleActionsHalos(this.possibleActions);
     
     //Sup.log("BoardManager:SelectPiece:numOfPossibleMoves="+this.piecePossibleMoveActions.length);
     
@@ -113,8 +121,15 @@ class BoardManagerBehavior extends Sup.Behavior {
       this.selectedPiece.deselectPiece();
       this.selectedPiece = null;
       
-      this.destroyActors(this.possibleActionHalos);
-      this.possibleActionHalos = null;
+      if(this.isActionSelected){
+        this.isActionSelected = false;
+        this.selectedAction = null;
+        HaloManagerBehavior.instance.destroySelectedActionHalos();
+      }
+      
+      //this.destroyActors(this.possibleActionHalos);
+      //this.possibleActionHalos = null;
+      HaloManagerBehavior.instance.destroyPossibleActionHalos();
       
       this.isPieceSelected = false;
     }
@@ -122,11 +137,13 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   // SELECT ACTION
   private selectAction(action: Action){
-    this.destroyActors(this.possibleActionHalos);
-    this.possibleActionHalos = null;
+    //this.destroyActors(this.possibleActionHalos);
+    //this.possibleActionHalos = null;
+    HaloManagerBehavior.instance.destroyPossibleActionHalos();
     
     this.selectedAction = action;
-    this.selectedActionHalo = this.createFilledHalo(this.selectedAction.destination);
+    //this.selectedActionHalo = this.createFilledHalo(this.selectedAction.destination);
+    HaloManagerBehavior.instance.createSelectedActionHalos(this.selectedAction);
     this.isActionSelected = true;
   }
   
@@ -135,12 +152,19 @@ class BoardManagerBehavior extends Sup.Behavior {
     //Sup.log("BoardManager:onEndTurnButtonPressed:called!");
     
     if(this.isPieceSelected && this.isActionSelected){
-      this.selectedPiece.deselectPiece();
-      this.selectedActionHalo.destroy();
-      this.selectedActionHalo = null;
+      if(this.selectedAction.type === ActionType.Move){
+        this.selectedPiece.move(this.selectedAction.destination);
+      }
+      else if(this.selectedAction.type === ActionType.Take){
+        let takenPiece = this.GetPawnByPos(this.selectedAction.takenPiecePos);
+        takenPiece.isDead = true;
+        takenPiece.move({x:-1, y:-1});
+        
+        this.selectedPiece.move(this.selectedAction.destination);
+      }
       
-      this.selectedPiece.move(this.selectedAction.destination);
       
+      this.DeselectCurrentPiece();
       this.startTurn(this.getOtherPlayer(this.currentPlayer));
     }
   }
@@ -231,6 +255,50 @@ class BoardManagerBehavior extends Sup.Behavior {
     return result;
   }
   
+  //******************************
+  // COMPUTE POSSIBLE TAKE ACTIONS
+  private computePossibleTakeActions(playerName: PlayerName): Action[]{
+    let result = new Array<Action>();
+    
+    for(let piece of this.piecesArray){
+      if(piece.player === playerName){
+        let pieceTakes = this.computePossibleTakesForPiece(piece);
+        
+        if(pieceTakes.length > 0){
+          result = result.concat(pieceTakes);
+        }
+      }
+    }
+    
+    return result;
+  }
+  
+  //*********************************
+  // COMPUTE POSSIBLE TAKES FOR PIECE
+  private computePossibleTakesForPiece(piece: PieceControllerBehavior): Action[]{
+    const deltas = [{x:-1,y:1}, {x:1,y:1}, {x:-1,y:-1}, {x:1,y:-1}];
+    
+    let result = new Array<Action>();
+    let piecePos = piece.position;
+    
+    for(let i = 0; i < 4; i++){
+      let possibleTakePos = {x:piecePos.x + deltas[i].x, y:piecePos.y + deltas[i].y};
+      let possibleDestinationPos = {x:possibleTakePos.x + deltas[i].x, y:possibleTakePos.y + deltas[i].y};
+      
+      if(this.isPosLegal(possibleTakePos) && !this.isTileEmpty(possibleTakePos)){
+        if(this.isPosLegal(possibleDestinationPos) && this.isTileEmpty(possibleDestinationPos)){
+          let takenPiece = this.GetPawnByPos(possibleTakePos);
+
+          if(takenPiece.player !== piece.player){
+            result.push(new Action(ActionType.Take, piece, possibleDestinationPos, possibleTakePos));
+          }
+        }
+      }
+    }
+    
+    return result;
+  }
+  
   private GetPawnByPos(pos:Sup.Math.XY) :PieceControllerBehavior{
     //Sup.log("BoardManager:GetPawnByPos:called! pos="+JSON.stringify(pos));
     
@@ -306,7 +374,7 @@ class BoardManagerBehavior extends Sup.Behavior {
   //======================================================================================
   //======================================================================================
   
-  private createEmptyHalos(actions: Action[]) :Sup.Actor[]{
+  /*private createEmptyHalos(actions: Action[]) :Sup.Actor[]{
     let result = new Array<Sup.Actor>();
     
     for(let action of actions){
@@ -314,21 +382,21 @@ class BoardManagerBehavior extends Sup.Behavior {
     }
     
     return result;
-  }
+  }*/
   
-  private createEmptyHalo(tilePos: Sup.Math.XY) :Sup.Actor{
+  /*private createEmptyHalo(tilePos: Sup.Math.XY) :Sup.Actor{
     let actors = Sup.appendScene("Prefabs/EmptyHaloPrefab", this.actor);
     actors[0].setLocalPosition({x:tilePos.x + 0.5, y:tilePos.y + 0.5, z:0.5});
     return actors[0];
-  }
+  }*/
   
-  private createFilledHalo(tilePos: Sup.Math.XY) :Sup.Actor{
+  /*private createFilledHalo(tilePos: Sup.Math.XY) :Sup.Actor{
     let actors = Sup.appendScene("Prefabs/FilledHaloPrefab", this.actor);
     actors[0].setLocalPosition({x:tilePos.x + 0.5, y:tilePos.y + 0.5, z:0.5});
     return actors[0];
-  }
+  }*/
   
-  private destroyActors(actors: Sup.Actor[]){
+  /*private destroyActors(actors: Sup.Actor[]){
     if(actors === null){
       return;
     }
@@ -336,6 +404,6 @@ class BoardManagerBehavior extends Sup.Behavior {
     for(let actor of actors){
       actor.destroy();
     }
-  }
+  }*/
 }
 Sup.registerBehavior(BoardManagerBehavior);
