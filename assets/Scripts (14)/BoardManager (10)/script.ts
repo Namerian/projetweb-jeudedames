@@ -10,10 +10,12 @@ class BoardManagerBehavior extends Sup.Behavior {
   
   camera: Sup.Camera;
   currentPlayerView: CurrentPlayerViewBehavior;
+  victoryScreenView: VictoryScreenViewBehavior;
   
   //=====================
   
   piecesArray: PieceControllerBehavior[];
+  isGameRunning: boolean;
   
   currentPlayer: PlayerName;
   playerPossibleActions: Action[];
@@ -40,6 +42,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.camera = null;
     
     this.piecesArray = new Array<PieceControllerBehavior>();
+    this.isGameRunning = false;
     
     this.currentPlayer = null;
     this.playerPossibleActions = null;
@@ -61,6 +64,8 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     this.SetupGame();
     
+    this.isGameRunning = true;
+    
     this.startTurn(PlayerName.Red);
   }
   
@@ -76,16 +81,36 @@ class BoardManagerBehavior extends Sup.Behavior {
     //this.DeselectCurrentPiece();
     this.playerPossibleActions = null;
     
-    this.currentPlayer = playerName;
-    this.currentPlayerView.setText(this.currentPlayer);
+    let redPlayerDead = true;
+    let blackPlayerDead = true;
     
-    this.playerPossibleActions = this.computePossibleTakeActions(this.currentPlayer);
-    
-    if(this.playerPossibleActions.length === 0){
-      this.playerPossibleActions = this.computePossibleMoveActions(this.currentPlayer);
+    for(let piece of this.piecesArray){
+      if(piece.player === PlayerName.Black && !piece.isDead){
+        blackPlayerDead = false;
+      }
+      else if(piece.player === PlayerName.Red && !piece.isDead){
+        redPlayerDead = false;
+      }
     }
     
-    
+    if(blackPlayerDead){
+      this.isGameRunning = false;
+      this.victoryScreenView.activate(PlayerName.Red);
+    }
+    else if(redPlayerDead){
+      this.isGameRunning = false;
+      this.victoryScreenView.activate(PlayerName.Black);
+    }
+    else{
+      this.currentPlayer = playerName;
+      this.currentPlayerView.setText(this.currentPlayer);
+
+      this.playerPossibleActions = this.computePossibleTakeActions(this.currentPlayer);
+
+      if(this.playerPossibleActions.length === 0){
+        this.playerPossibleActions = this.computePossibleMoveActions(this.currentPlayer);
+      }
+    }
   }
   
   // SELECT PIECE
@@ -151,6 +176,10 @@ class BoardManagerBehavior extends Sup.Behavior {
   public onEndTurnButtonPressed(){
     //Sup.log("BoardManager:onEndTurnButtonPressed:called!");
     
+    if(!this.isGameRunning){
+      return;
+    }
+    
     if(this.isPieceSelected && this.isActionSelected){
       if(this.selectedAction.type === ActionType.Move){
         this.selectedPiece.move(this.selectedAction.destination);
@@ -172,6 +201,10 @@ class BoardManagerBehavior extends Sup.Behavior {
   // ON CLICK ON BOARD
   public onClickOnBoard(){
     //Sup.log("BoardManager:onClickOnBoard:called!");
+    
+    if(!this.isGameRunning){
+      return;
+    }
     
     let mousePos = Sup.Input.getMousePosition();
     //Sup.log("BoardManager:update:mouse clicked! pos="+JSON.stringify(mousePos));
@@ -354,9 +387,53 @@ class BoardManagerBehavior extends Sup.Behavior {
   //======================================================================================
   
   private SetupGame(){
+    /*this.CreatePawn(PlayerName.Red, {x:0, y:0});
     this.CreatePawn(PlayerName.Red, {x:2, y:0});
+    this.CreatePawn(PlayerName.Red, {x:4, y:0});
+    this.CreatePawn(PlayerName.Red, {x:6, y:0});
+    this.CreatePawn(PlayerName.Red, {x:8, y:0});
     
-    this.CreatePawn(PlayerName.Black, {x:1, y:9});
+    this.CreatePawn(PlayerName.Red, {x:1, y:1});
+    this.CreatePawn(PlayerName.Red, {x:3, y:1});
+    this.CreatePawn(PlayerName.Red, {x:5, y:1});
+    this.CreatePawn(PlayerName.Red, {x:7, y:1});
+    this.CreatePawn(PlayerName.Red, {x:9, y:1});
+    
+    this.CreatePawn(PlayerName.Red, {x:0, y:2});
+    this.CreatePawn(PlayerName.Red, {x:2, y:2});
+    this.CreatePawn(PlayerName.Red, {x:4, y:2});
+    this.CreatePawn(PlayerName.Red, {x:6, y:2});
+    this.CreatePawn(PlayerName.Red, {x:8, y:2});
+    
+    this.CreatePawn(PlayerName.Red, {x:1, y:3});
+    this.CreatePawn(PlayerName.Red, {x:3, y:3});
+    this.CreatePawn(PlayerName.Red, {x:5, y:3});
+    this.CreatePawn(PlayerName.Red, {x:7, y:3});*/
+    this.CreatePawn(PlayerName.Red, {x:9, y:3});
+    
+    /*this.CreatePawn(PlayerName.Black, {x:1, y:9});
+    this.CreatePawn(PlayerName.Black, {x:3, y:9});
+    this.CreatePawn(PlayerName.Black, {x:5, y:9});
+    this.CreatePawn(PlayerName.Black, {x:7, y:9});
+    this.CreatePawn(PlayerName.Black, {x:9, y:9});
+    
+    this.CreatePawn(PlayerName.Black, {x:0, y:8});
+    this.CreatePawn(PlayerName.Black, {x:2, y:8});
+    this.CreatePawn(PlayerName.Black, {x:4, y:8});
+    this.CreatePawn(PlayerName.Black, {x:6, y:8});
+    this.CreatePawn(PlayerName.Black, {x:8, y:8});
+    
+    this.CreatePawn(PlayerName.Black, {x:1, y:7});
+    this.CreatePawn(PlayerName.Black, {x:3, y:7});
+    this.CreatePawn(PlayerName.Black, {x:5, y:7});
+    this.CreatePawn(PlayerName.Black, {x:7, y:7});
+    this.CreatePawn(PlayerName.Black, {x:9, y:7});
+    
+    this.CreatePawn(PlayerName.Black, {x:0, y:6});
+    this.CreatePawn(PlayerName.Black, {x:2, y:6});
+    this.CreatePawn(PlayerName.Black, {x:4, y:6});
+    this.CreatePawn(PlayerName.Black, {x:6, y:6});*/
+    this.CreatePawn(PlayerName.Black, {x:8, y:6});
   }
   
   private CreatePawn(playerName:PlayerName, tilePosition:Sup.Math.XY){

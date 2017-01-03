@@ -6,6 +6,10 @@
       "parentBehavior": null,
       "properties": [
         {
+          "name": "isGameRunning",
+          "type": "boolean"
+        },
+        {
           "name": "isPieceSelected",
           "type": "boolean"
         },
@@ -48,6 +52,12 @@
     },
     "HaloManagerBehavior": {
       "scriptId": "30",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
+    },
+    "VictoryScreenViewBehavior": {
+      "scriptId": "32",
       "line": 0,
       "parentBehavior": null,
       "properties": []

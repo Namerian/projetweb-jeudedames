@@ -306,6 +306,80 @@
           "visible": true,
           "layer": 0,
           "prefab": null
+        },
+        {
+          "id": "8",
+          "name": "VictoryScreen",
+          "children": [],
+          "components": [
+            {
+              "type": "SpriteRenderer",
+              "config": {
+                "formatVersion": 1,
+                "spriteAssetId": "31",
+                "animationId": null,
+                "horizontalFlip": false,
+                "verticalFlip": false,
+                "castShadow": false,
+                "receiveShadow": false,
+                "color": "ffffff",
+                "overrideOpacity": false,
+                "opacity": null,
+                "materialType": "basic",
+                "shaderAssetId": null
+              },
+              "id": "0"
+            },
+            {
+              "type": "TextRenderer",
+              "config": {
+                "formatVersion": 2,
+                "fontAssetId": "25",
+                "text": "Player\nWins!",
+                "alignment": "center",
+                "verticalAlignment": "center",
+                "size": 152,
+                "color": "000000",
+                "overrideOpacity": false,
+                "opacity": null
+              },
+              "id": "1"
+            },
+            {
+              "type": "Behavior",
+              "config": {
+                "behaviorName": "VictoryScreenViewBehavior",
+                "propertyValues": {}
+              },
+              "id": "2"
+            },
+            {
+              "type": "fMouseInput",
+              "config": {
+                "cameraActorName": "Camera"
+              },
+              "id": "3"
+            }
+          ],
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 3
+          },
+          "orientation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          },
+          "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "visible": false,
+          "layer": 0,
+          "prefab": null
         }
       ],
       "components": [],
