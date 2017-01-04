@@ -235,7 +235,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     if(clickedPiece !== null && clickedPiece.player === this.currentPlayer){
       this.SelectPiece(clickedPiece);
     }
-    else if(clickedDestinationAction !== null){
+    else if(clickedDestinationAction !== null && !this.isActionSelected){
       //Sup.log("BoardManager:update:click on move destination! pos="+JSON.stringify(clickedDestinationAction.destination));
       this.selectAction(clickedDestinationAction);           
     }
@@ -343,38 +343,56 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     for(let i = 0; i < 4; i++){
       let possibleTakePos = {x:piecePos.x + deltas[i].x, y:piecePos.y + deltas[i].y};
-      let possibleDestinationPos = {x:possibleTakePos.x + deltas[i].x, y:possibleTakePos.y + deltas[i].y};
+      let pieceToTake = null;
       
-      if(piece.isKing){
-        Sup.log("BoardManager:computePossibleTakesForPiece:possibleTakePos="+JSON.stringify(possibleTakePos));
-        Sup.log("BoardManager:computePossibleTakesForPiece:possibleDestinationPos="+JSON.stringify(possibleDestinationPos));
+      if(!this.isPosLegal(possibleTakePos)){
+        continue;
       }
-      
-      if(this.isPosLegal(possibleTakePos) && !this.isTileEmpty(possibleTakePos) && this.isPosLegal(possibleDestinationPos) && this.isTileEmpty(possibleDestinationPos)){
-        let takenPiece = this.GetPawnByPos(possibleTakePos);
-
-        if(takenPiece.player !== piece.player){
-          result.push(new Action(ActionType.Take, piece, possibleDestinationPos, possibleTakePos));
+      else if(!this.isTileEmpty(possibleTakePos)){
+        let otherPiece = this.GetPawnByPos(possibleTakePos);
+        
+        if(otherPiece.player !== piece.player){
+          pieceToTake = otherPiece;
+        }
+      }
+      else if(piece.isKing){
+        while(true){
+          possibleTakePos = {x:possibleTakePos.x + deltas[i].x, y:possibleTakePos.y + deltas[i].y};
+          
+          if(!this.isPosLegal(possibleTakePos)){
+            break;
+          }
+          else if(!this.isTileEmpty(possibleTakePos)){
+            let otherPiece = this.GetPawnByPos(possibleTakePos);
+            
+            if(otherPiece.player !== piece.player){
+              pieceToTake = otherPiece;
+              break;
+            }
+          }
         }
       }
       
-      if(piece.isKing){
-        while(true){
-          possibleTakePos = {x:possibleTakePos.x + deltas[i].x, y:possibleTakePos.y + deltas[i].y};
-          possibleDestinationPos = {x:possibleTakePos.x + deltas[i].x, y:possibleTakePos.y + deltas[i].y};
+      if(pieceToTake !== null){
+        let possibleDestinationPos = {x:possibleTakePos.x + deltas[i].x, y:possibleTakePos.y + deltas[i].y};
+        
+        if(!this.isPosLegal(possibleDestinationPos) || !this.isTileEmpty(possibleDestinationPos)){
+          continue;
+        }
+        else{
+          result.push(new Action(ActionType.Take, piece, possibleDestinationPos, possibleTakePos));
           
-          Sup.log("BoardManager:computePossibleTakesForPiece:possibleTakePos="+JSON.stringify(possibleTakePos));
-          Sup.log("BoardManager:computePossibleTakesForPiece:possibleDestinationPos="+JSON.stringify(possibleDestinationPos));
-          
-          if(this.isPosLegal(possibleTakePos) && !this.isTileEmpty(possibleTakePos) && this.isPosLegal(possibleDestinationPos) && this.isTileEmpty(possibleDestinationPos)){
-            let takenPiece = this.GetPawnByPos(possibleTakePos);
-
-            if(takenPiece.player !== piece.player){
-              result.push(new Action(ActionType.Take, piece, possibleDestinationPos, possibleTakePos));
+          if(piece.isKing){
+            while(true){
+              possibleDestinationPos = {x:possibleDestinationPos.x + deltas[i].x, y:possibleDestinationPos.y + deltas[i].y};
+              
+              if(!this.isPosLegal(possibleDestinationPos) || !this.isTileEmpty(possibleDestinationPos)){
+                break;
+              }
+              else{
+                result.push(new Action(ActionType.Take, piece, possibleDestinationPos, possibleTakePos));
+              }
             }
-          }
-          else{
-            break;
           }
         }
       }
