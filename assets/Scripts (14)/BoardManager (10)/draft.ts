@@ -373,9 +373,7 @@ class BoardManagerBehavior extends Sup.Behavior {
               result.push(new Action(ActionType.Take, piece, possibleDestinationPos, possibleTakePos));
             }
           }
-          else{
-            break;
-          }
+
         }
       }
     }

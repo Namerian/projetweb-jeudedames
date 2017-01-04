@@ -61,5 +61,18 @@ class PieceControllerBehavior extends Sup.Behavior {
     
     this.isSelected = false;
   }
+  
+  public upgradeToKing(){
+    if(!this.isKing){
+      this.isKing = true;
+      
+      if(this.player === PlayerName.Black){
+        this.actor.spriteRenderer.setSprite("Sprites/BlackKingSprite");
+      }
+      else if(this.player === PlayerName.Red){
+        this.actor.spriteRenderer.setSprite("Sprites/RedKingSprite");
+      }
+    }
+  }
 }
 Sup.registerBehavior(PieceControllerBehavior);
