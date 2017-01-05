@@ -9,6 +9,7 @@ class Action {
   
   destination: Sup.Math.XY;
   takenPiecePos: Sup.Math.XY;
+  previousAction: Action;
   
   constructor(type: ActionType, piece: PieceControllerBehavior, destination: Sup.Math.XY, takenPiecePos: Sup.Math.XY=null){
     this.type = type;
@@ -21,5 +22,7 @@ class Action {
     else{
       this.takenPiecePos = takenPiecePos;
     }
+    
+    this.previousAction = null;
   }
 }

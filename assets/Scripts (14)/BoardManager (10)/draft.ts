@@ -211,6 +211,7 @@ class BoardManagerBehavior extends Sup.Behavior {
           
           Sup.log("check: pos.x="+pos.x+" prev.x="+previousTakePos.x+" pos.y="+pos.y+" prev.y="+previousTakePos.y);
           if(pos.x !== previousTakePos.x || pos.y !== previousTakePos.y){
+            possibleAction.previousAction
             legalActions.push(possibleAction);
           }
         }
