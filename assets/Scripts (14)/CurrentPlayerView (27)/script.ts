@@ -3,7 +3,7 @@ class CurrentPlayerViewBehavior extends Sup.Behavior {
     BoardManagerBehavior.instance.currentPlayerView = this;
   }
 
-  public setText(player: PlayerName){
+  public SetText(player: PlayerName){
     if(player === PlayerName.Black){
       this.actor.textRenderer.setText("Player: Black");
     }

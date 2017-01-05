@@ -3,7 +3,7 @@ class VictoryScreenViewBehavior extends Sup.Behavior {
     BoardManagerBehavior.instance.victoryScreenView = this;
   }
   
-  public activate(winner: PlayerName){
+  public Activate(winner: PlayerName){
     this.actor.setVisible(true);
     
     if(winner === PlayerName.Black){
@@ -13,10 +13,10 @@ class VictoryScreenViewBehavior extends Sup.Behavior {
       this.actor.textRenderer.setText("Red\nWins!");
     }
     
-    this.actor.fMouseInput.emitter.on("leftClickReleased", () => { this.onLeftCLick(); });
+    this.actor.fMouseInput.emitter.on("leftClickReleased", () => { this.OnLeftCLick(); });
   }
   
-  public onLeftCLick() {
+  public OnLeftCLick() {
     Sup.exit();
   }
 }

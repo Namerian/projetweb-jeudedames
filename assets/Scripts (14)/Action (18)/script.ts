@@ -4,12 +4,16 @@ enum ActionType{
 }
 
 class Action {
-  type: ActionType;
-  piece: PieceControllerBehavior;
+  private type: ActionType;
+  private piece: PieceControllerBehavior;
   
-  destination: Sup.Math.XY;
-  takenPiecePos: Sup.Math.XY;
-  previousAction: Action;
+  private destination: Sup.Math.XY;
+  private takenPiecePos: Sup.Math.XY;
+  private previousAction: Action;
+
+  //=========================================================
+  //
+  //=========================================================
   
   constructor(type: ActionType, piece: PieceControllerBehavior, destination: Sup.Math.XY, takenPiecePos: Sup.Math.XY=null){
     this.type = type;
@@ -24,5 +28,37 @@ class Action {
     }
     
     this.previousAction = null;
+  }
+
+  //=========================================================
+  //
+  //=========================================================
+
+  public GetType(): ActionType{
+    return this.type;
+  }
+
+  public GetPiece(): PieceControllerBehavior{
+    return this.piece;
+  }
+
+  public GetDestination(): Sup.Math.XY{
+    return this.destination;
+  }
+
+  public GetTakenPiecePos(): Sup.Math.XY{
+    return this.takenPiecePos;
+  }
+
+  public GetPreviousAction(): Action{
+    return this.previousAction;
+  }
+
+  public HasPreviousAction(): boolean{
+    return this.previousAction !== null;
+  }
+
+  public SetPreviousAction(action: Action){
+    this.previousAction = action;
   }
 }

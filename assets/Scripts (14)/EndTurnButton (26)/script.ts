@@ -1,10 +1,10 @@
 class EndTurnButtonBehavior extends Sup.Behavior {
   awake() {
-    this.actor.fMouseInput.emitter.on("leftClickReleased", () => { this.onLeftCLick(); });
+    this.actor.fMouseInput.emitter.on("leftClickReleased", () => { this.OnLeftCLick(); });
   }
   
-  public onLeftCLick() {
-    BoardManagerBehavior.instance.onEndTurnButtonPressed();
+  public OnLeftCLick() {
+    BoardManagerBehavior.instance.OnEndTurnButtonPressed();
   }
 }
 Sup.registerBehavior(EndTurnButtonBehavior);

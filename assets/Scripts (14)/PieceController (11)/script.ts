@@ -1,13 +1,17 @@
 class PieceControllerBehavior extends Sup.Behavior {
-  player :PlayerName;
-  position :Sup.Math.XY;
-  isKing :boolean;
-  isDead :boolean;
+  private player :PlayerName;
+  private position :Sup.Math.XY;
+  private isKing :boolean;
+  private isDead :boolean;
   
-  isSelected :boolean;
-  halo :Sup.Actor;
+  private isSelected :boolean;
+  private halo :Sup.Actor;
   
-  public initialize(player:PlayerName, boardPos:Sup.Math.XY){
+  //========================================================
+  //
+  //========================================================
+  
+  public Initialize(player:PlayerName, boardPos:Sup.Math.XY){
     this.player = player;
     this.position = {x:boardPos.x, y:boardPos.y};
     this.isKing = false;
@@ -32,12 +36,12 @@ class PieceControllerBehavior extends Sup.Behavior {
     this.actor.spriteRenderer.setSprite(spriteName);
   }
   
-  public move(boardPos: Sup.Math.XY){
+  public MovePiece(boardPos: Sup.Math.XY){
     this.position = boardPos;
     this.actor.setLocalPosition({x:boardPos.x + 0.5, y:boardPos.y + 0.5});
   }
   
-  public selectPiece(){
+  public SelectPiece(){
     //Sup.log("PieceController:selectPiece:called!");
     if(this.isSelected){
       return;
@@ -51,7 +55,7 @@ class PieceControllerBehavior extends Sup.Behavior {
     this.isSelected = true;
   }
   
-  public deselectPiece(){
+  public DeselectPiece(){
     if(!this.isSelected){
       return;
     }
@@ -62,7 +66,7 @@ class PieceControllerBehavior extends Sup.Behavior {
     this.isSelected = false;
   }
   
-  public upgradeToKing(){
+  public UpgradeToKing(){
     if(!this.isKing){
       this.isKing = true;
       
@@ -73,6 +77,34 @@ class PieceControllerBehavior extends Sup.Behavior {
         this.actor.spriteRenderer.setSprite("Sprites/RedKingSprite");
       }
     }
+  }
+  
+  //========================================================
+  //
+  //========================================================
+  
+  public GetPlayerName(): PlayerName{
+    return this.player;
+  }
+  
+  public GetPosition(): Sup.Math.XY{
+    return this.position;
+  }
+  
+  public CheckIsKing(): boolean{
+    return this.isKing;
+  }
+  
+  public SetIsKing(isKing: boolean){
+    this.isKing = isKing;
+  }
+  
+  public CheckIsDead(): boolean{
+    return this.isDead;
+  }
+  
+  public SetIsDead(isDead: boolean){
+    this.isDead = isDead;
   }
 }
 Sup.registerBehavior(PieceControllerBehavior);
