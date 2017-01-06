@@ -23,20 +23,7 @@
       "scriptId": "11",
       "line": 0,
       "parentBehavior": null,
-      "properties": [
-        {
-          "name": "isKing",
-          "type": "boolean"
-        },
-        {
-          "name": "isDead",
-          "type": "boolean"
-        },
-        {
-          "name": "isSelected",
-          "type": "boolean"
-        }
-      ]
+      "properties": []
     },
     "EndTurnButtonBehavior": {
       "scriptId": "26",

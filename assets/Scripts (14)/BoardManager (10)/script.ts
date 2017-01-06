@@ -28,6 +28,8 @@ class BoardManagerBehavior extends Sup.Behavior {
   isActionSelected: boolean;
   selectedAction: Action;
   
+  movingPieces: PieceControllerBehavior[];
+  
   //======================================================================================
   //======================================================================================
   // behaviour methods
@@ -52,6 +54,8 @@ class BoardManagerBehavior extends Sup.Behavior {
     
     this.isActionSelected = false;
     this.selectedAction = null;
+    
+    this.movingPieces = new Array<PieceControllerBehavior>();
   }
   
   start(){
@@ -138,6 +142,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     if(this.isPieceSelected){
       this.selectedPiece.DeselectPiece();
       this.selectedPiece = null;
+      this.possibleActions.length = 0;
       
       if(this.isActionSelected){
         this.isActionSelected = false;
@@ -236,12 +241,16 @@ class BoardManagerBehavior extends Sup.Behavior {
       
       // execute the action
       if(this.selectedAction.GetType() === ActionType.Move){
-        this.selectedPiece.MovePiece(this.selectedAction.GetDestination());
+        this.selectedPiece.MovePiece(this.selectedPiece.GetPosition(), this.selectedAction.GetDestination());
+        this.movingPieces.push(this.selectedPiece);
       }
       else if(this.selectedAction.GetType() === ActionType.Take){
+        let destinations = new Array<Sup.Math.XY>();
         let takePositions = new Array<Sup.Math.XY>();
         let takeAction = this.selectedAction;
+        
         while(true){
+          destinations.push(takeAction.GetDestination());
           takePositions.push(takeAction.GetTakenPiecePos());
           
           if(takeAction.HasPreviousAction()){
@@ -252,13 +261,24 @@ class BoardManagerBehavior extends Sup.Behavior {
           }
         }
         
+        destinations = destinations.reverse();
+        for(let i = 0; i < destinations.length; i++){
+          let destination = destinations[i];
+          let origin = this.selectedPiece.GetPosition();
+          
+          if(i > 0){
+            origin = destinations[i-1];
+          }
+          
+          this.selectedPiece.MovePiece(origin, destination);
+        }
+        this.movingPieces.push(this.selectedPiece);
+        
         for(let takePosition of takePositions){
           let takenPiece = this.GetPieceByPos(takePosition);
           takenPiece.SetIsDead(true);
-          takenPiece.MovePiece({x:-1, y:-1});
+          takenPiece.SetPosition({x:-10, y:-10});
         }
-        
-        this.selectedPiece.MovePiece(this.selectedAction.GetDestination());
       }
       
       // upgrade to king
@@ -271,14 +291,14 @@ class BoardManagerBehavior extends Sup.Behavior {
       
       //
       this.DeselectCurrentPiece();
-      this.StartTurn(this.GetOtherPlayer(this.currentPlayer));
+      //this.StartTurn(this.GetOtherPlayer(this.currentPlayer));
     }
   }
   
   //******************
   // ON CLICK ON BOARD
-  public OnClickOnBoard(){    
-    if(!this.isGameRunning){
+  public OnClickOnBoard(){
+    if(!this.isGameRunning || this.movingPieces.length > 0){
       return;
     }
     
@@ -306,6 +326,21 @@ class BoardManagerBehavior extends Sup.Behavior {
     }
     else{
       this.DeselectCurrentPiece();
+    }
+  }
+  
+  //*******************
+  // ON ANIMATIONS DONE
+  public OnAnimationsDone(piece: PieceControllerBehavior){
+    Sup.log("BoardManager:OnAnimationsDone:called");
+    let index = this.movingPieces.indexOf(piece);
+    
+    if(index > -1){
+      this.movingPieces.splice(index, 1);
+      
+      if(this.movingPieces.length === 0){
+        this.StartTurn(this.GetOtherPlayer(this.currentPlayer));
+      }
     }
   }
   

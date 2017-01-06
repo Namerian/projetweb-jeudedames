@@ -84,7 +84,7 @@ class PieceControllerBehavior extends Sup.Behavior {
     
     if(this.tweens.length > 0){
       Sup.log("PieceController:OnTweenComplete:tweens remaining = " + this.tweens.length + " tweenPositions.length=" + this.tweenPositions.length);
-      this.tweens[0].onUpdate(this.OnTweenUpdate.bind(this)).onComplete(this.OnTweenComplete).start();
+      this.tweens[0].onUpdate(this.OnTweenUpdate.bind(this)).onComplete(this.OnTweenComplete.).start();
     }
     else{
       this.isMoving = false;
