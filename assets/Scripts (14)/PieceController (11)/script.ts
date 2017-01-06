@@ -46,7 +46,7 @@ class PieceControllerBehavior extends Sup.Behavior {
   //***********
   // MOVE PIECE
   public MovePiece(origin: Sup.Math.XY, destination: Sup.Math.XY){
-    Sup.log("PieceController:MovePiece:called! destination:" + JSON.stringify(destination));
+    //Sup.log("PieceController:MovePiece:called! destination:" + JSON.stringify(destination));
     /*this.position = boardPos;
     this.actor.setLocalPosition({x:boardPos.x + 0.5, y:boardPos.y + 0.5});*/
     
@@ -72,9 +72,9 @@ class PieceControllerBehavior extends Sup.Behavior {
   //******************
   // ON TWEEN COMPLETE
   OnTweenComplete(){
-    Sup.log(this);
-    Sup.log("PieceController:OnTweenComplete:called! tweens.length=" + this.tweens.length + " tweenPositions.length=" + this.tweenPositions.length);
-    Sup.log("PieceController:OnTweenComplete:tweenPos=" + JSON.stringify(this.tweenPositions[0]));
+    //Sup.log(this);
+    //Sup.log("PieceController:OnTweenComplete:called! tweens.length=" + this.tweens.length + " tweenPositions.length=" + this.tweenPositions.length);
+    //Sup.log("PieceController:OnTweenComplete:tweenPos=" + JSON.stringify(this.tweenPositions[0]));
     
     let destinationWorldPos = this.tweenPositions[0];
     this.SetPosition({x:destinationWorldPos.x - 0.5, y:destinationWorldPos.y - 0.5});
@@ -83,7 +83,7 @@ class PieceControllerBehavior extends Sup.Behavior {
     this.tweenPositions.splice(0, 1);
     
     if(this.tweens.length > 0){
-      Sup.log("PieceController:OnTweenComplete:tweens remaining = " + this.tweens.length + " tweenPositions.length=" + this.tweenPositions.length);
+      //Sup.log("PieceController:OnTweenComplete:tweens remaining = " + this.tweens.length + " tweenPositions.length=" + this.tweenPositions.length);
       this.tweens[0].onUpdate(this.OnTweenUpdate.bind(this)).onComplete(this.OnTweenComplete.bind(this)).start();
     }
     else{
@@ -120,6 +120,8 @@ class PieceControllerBehavior extends Sup.Behavior {
   
   public UpgradeToKing(){
     if(!this.isKing){
+      Sup.log("PieceController:UpgradeToKing:called!");
+      
       this.isKing = true;
       
       if(this.player === PlayerName.Black){

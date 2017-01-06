@@ -281,14 +281,6 @@ class BoardManagerBehavior extends Sup.Behavior {
         }
       }
       
-      // upgrade to king
-      if(this.selectedPiece.GetPlayerName() === PlayerName.Black && this.selectedPiece.GetPosition().y === 0){
-        this.selectedPiece.UpgradeToKing();
-      }
-      else if(this.selectedPiece.GetPlayerName() === PlayerName.Red && this.selectedPiece.GetPosition().y === 9){
-        this.selectedPiece.UpgradeToKing();
-      }
-      
       //
       this.DeselectCurrentPiece();
       //this.StartTurn(this.GetOtherPlayer(this.currentPlayer));
@@ -339,6 +331,14 @@ class BoardManagerBehavior extends Sup.Behavior {
       this.movingPieces.splice(index, 1);
       
       if(this.movingPieces.length === 0){
+        // upgrade to king
+        if(piece.GetPlayerName() === PlayerName.Black && piece.GetPosition().y === 0){
+          piece.UpgradeToKing();
+        }
+        else if(piece.GetPlayerName() === PlayerName.Red && piece.GetPosition().y === 9){
+          piece.UpgradeToKing();
+        }
+        
         this.StartTurn(this.GetOtherPlayer(this.currentPlayer));
       }
     }
@@ -564,7 +564,7 @@ class BoardManagerBehavior extends Sup.Behavior {
   //======================================================================================
   
   private SetupGame(){
-    this.CreatePawn(PlayerName.Red, {x:0, y:0});
+    /*this.CreatePawn(PlayerName.Red, {x:0, y:0});
     this.CreatePawn(PlayerName.Red, {x:2, y:0});
     this.CreatePawn(PlayerName.Red, {x:4, y:0});
     this.CreatePawn(PlayerName.Red, {x:6, y:0});
@@ -580,7 +580,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.CreatePawn(PlayerName.Red, {x:2, y:2});
     this.CreatePawn(PlayerName.Red, {x:4, y:2});
     this.CreatePawn(PlayerName.Red, {x:6, y:2});
-    this.CreatePawn(PlayerName.Red, {x:8, y:2});
+    this.CreatePawn(PlayerName.Red, {x:8, y:2});*/
     
     this.CreatePawn(PlayerName.Red, {x:1, y:3});
     this.CreatePawn(PlayerName.Red, {x:3, y:3});
@@ -588,7 +588,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.CreatePawn(PlayerName.Red, {x:7, y:3});
     this.CreatePawn(PlayerName.Red, {x:9, y:3});
     
-    this.CreatePawn(PlayerName.Black, {x:1, y:9});
+    /*this.CreatePawn(PlayerName.Black, {x:1, y:9});
     this.CreatePawn(PlayerName.Black, {x:3, y:9});
     this.CreatePawn(PlayerName.Black, {x:5, y:9});
     this.CreatePawn(PlayerName.Black, {x:7, y:9});
@@ -604,7 +604,7 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.CreatePawn(PlayerName.Black, {x:3, y:7});
     this.CreatePawn(PlayerName.Black, {x:5, y:7});
     this.CreatePawn(PlayerName.Black, {x:7, y:7});
-    this.CreatePawn(PlayerName.Black, {x:9, y:7});
+    this.CreatePawn(PlayerName.Black, {x:9, y:7});*/
     
     this.CreatePawn(PlayerName.Black, {x:0, y:6});
     this.CreatePawn(PlayerName.Black, {x:2, y:6});
