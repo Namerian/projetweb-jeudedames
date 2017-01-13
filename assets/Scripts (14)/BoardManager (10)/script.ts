@@ -692,7 +692,7 @@ class BoardManagerBehavior extends Sup.Behavior {
       }
     }
     
-    for(let y = 3; y < 4; y++){
+    for(let y = 0; y < 4; y++){
       for(let x = 0; x < BoardState.BOARD_SIZE; x++){
         if(y % 2 === 0 && x % 2 === 0){
           let tileId = BoardState.GetTileId({x:x, y:y});
@@ -709,7 +709,7 @@ class BoardManagerBehavior extends Sup.Behavior {
       }
     }
     
-    for(let y = 6; y < 7; y++){
+    for(let y = 6; y < 10; y++){
       for(let x = 0; x < BoardState.BOARD_SIZE; x++){
         if(y % 2 === 0 && x % 2 === 0){
           let tileId = BoardState.GetTileId({x:x, y:y});
