@@ -56,7 +56,8 @@ class HaloManagerBehavior extends Sup.Behavior {
     //create destination halo
     let destinationPrefab = Sup.appendScene("Prefabs/EmptyHaloPrefab", this.actor);
     let destinationHalo = destinationPrefab[0];
-    destinationHalo.setLocalPosition({x:possibleAction.GetDestination().x + 0.5, y:possibleAction.GetDestination().y + 0.5, z:0.5});
+    let destinationBoardPos: Sup.Math.XY = BoardState.GetBoardPos(possibleAction.GetDestinationId());
+    destinationHalo.setLocalPosition({x:destinationBoardPos.x + 0.5, y:destinationBoardPos.y + 0.5, z:0.5});
     result.push(destinationHalo);
     
     //create take halo
@@ -74,7 +75,8 @@ class HaloManagerBehavior extends Sup.Behavior {
     //create destination halo
     let destinationPrefab = Sup.appendScene("Prefabs/FilledHaloPrefab", this.actor);
     let destinationHalo = destinationPrefab[0];
-    destinationHalo.setLocalPosition({x:selectedAction.GetDestination().x + 0.5, y:selectedAction.GetDestination().y + 0.5, z:0.5});
+    let destinationBoardPos: Sup.Math.XY = BoardState.GetBoardPos(selectedAction.GetDestinationId());
+    destinationHalo.setLocalPosition({x:destinationBoardPos.x + 0.5, y:destinationBoardPos.y + 0.5, z:0.5});
     this.selectedActionHalos.push(destinationHalo);
     
     //create take halo

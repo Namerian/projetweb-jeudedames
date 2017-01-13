@@ -1,5 +1,5 @@
 {
-  "nextEntryId": 33,
+  "nextEntryId": 39,
   "nodes": [
     {
       "id": "1",
@@ -101,38 +101,67 @@
       "type": null,
       "children": [
         {
+          "id": "33",
+          "name": "Views",
+          "type": null,
+          "children": [
+            {
+              "id": "32",
+              "name": "VictoryScreenView",
+              "type": "script"
+            },
+            {
+              "id": "27",
+              "name": "CurrentPlayerView",
+              "type": "script"
+            },
+            {
+              "id": "30",
+              "name": "HaloManager",
+              "type": "script"
+            },
+            {
+              "id": "38",
+              "name": "PieceView",
+              "type": "script"
+            }
+          ]
+        },
+        {
+          "id": "37",
+          "name": "Models",
+          "type": null,
+          "children": [
+            {
+              "id": "34",
+              "name": "BoardState",
+              "type": "script"
+            },
+            {
+              "id": "18",
+              "name": "Action",
+              "type": "script"
+            },
+            {
+              "id": "35",
+              "name": "Tile",
+              "type": "script"
+            },
+            {
+              "id": "36",
+              "name": "Piece",
+              "type": "script"
+            }
+          ]
+        },
+        {
           "id": "10",
           "name": "BoardManager",
           "type": "script"
         },
         {
-          "id": "11",
-          "name": "PieceController",
-          "type": "script"
-        },
-        {
           "id": "26",
           "name": "EndTurnButton",
-          "type": "script"
-        },
-        {
-          "id": "18",
-          "name": "Action",
-          "type": "script"
-        },
-        {
-          "id": "27",
-          "name": "CurrentPlayerView",
-          "type": "script"
-        },
-        {
-          "id": "30",
-          "name": "HaloManager",
-          "type": "script"
-        },
-        {
-          "id": "32",
-          "name": "VictoryScreenView",
           "type": "script"
         }
       ]

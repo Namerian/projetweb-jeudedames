@@ -4,25 +4,6 @@
       "scriptId": "10",
       "line": 5,
       "parentBehavior": null,
-      "properties": [
-        {
-          "name": "isGameRunning",
-          "type": "boolean"
-        },
-        {
-          "name": "isPieceSelected",
-          "type": "boolean"
-        },
-        {
-          "name": "isActionSelected",
-          "type": "boolean"
-        }
-      ]
-    },
-    "PieceControllerBehavior": {
-      "scriptId": "11",
-      "line": 0,
-      "parentBehavior": null,
       "properties": []
     },
     "EndTurnButtonBehavior": {
@@ -45,6 +26,12 @@
     },
     "VictoryScreenViewBehavior": {
       "scriptId": "32",
+      "line": 0,
+      "parentBehavior": null,
+      "properties": []
+    },
+    "PieceViewBehavior": {
+      "scriptId": "38",
       "line": 0,
       "parentBehavior": null,
       "properties": []

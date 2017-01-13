@@ -27,10 +27,10 @@
         {
           "type": "Behavior",
           "config": {
-            "behaviorName": "PieceControllerBehavior",
+            "behaviorName": "PieceViewBehavior",
             "propertyValues": {}
           },
-          "id": "1"
+          "id": "2"
         }
       ],
       "position": {
