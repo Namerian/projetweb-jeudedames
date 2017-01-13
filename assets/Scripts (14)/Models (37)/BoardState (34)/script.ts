@@ -14,7 +14,7 @@ class BoardState {
   }
   
   public GetCopy(): BoardState{
-    Sup.log("BoardState:GetCopy:called!");
+    //Sup.log("BoardState:GetCopy:called!");
     
     let copy: BoardState;
     let newTiles: Tile[][] = new Array<Array<Tile>>();
@@ -58,7 +58,7 @@ class BoardState {
   }
   
   public static CheckIfTileIdLegal(tileId: number): boolean{
-    if(tileId < 0 || tileId >= BoardState.BOARD_SIZE * BoardState.BOARD_SIZE){
+    if(tileId < 0 || tileId > BoardState.BOARD_SIZE * BoardState.BOARD_SIZE){
       return false;
     }
     
@@ -67,6 +67,7 @@ class BoardState {
   
   public static GetBoardPos(tileId: number): Sup.Math.XY{
     if(!BoardState.CheckIfTileIdLegal(tileId)){
+      Sup.log("BoardState:GetBoardPos:tileId not legal");
       return null;
     }
     
@@ -95,15 +96,6 @@ class BoardState {
       return -1;
     }
     
-    if(this.tiles === null){
-      Sup.log("test 1");
-    }
-    else if(this.tiles[boardPos.x] === null){
-      Sup.log("test 2");
-    }
-    
-    Sup.log("test 3: x=" + boardPos.x + " y=" + boardPos.y);
-    
     let tile: Tile = this.tiles[boardPos.x][boardPos.y];
     
     return tile.GetPieceId();
@@ -129,6 +121,12 @@ class BoardState {
     let piece: Piece = this.GetPiece(pieceId);
     
     return piece.GetIsKing();
+  }
+
+  public GetPieceIsDead(pieceId: number): boolean{
+    let piece: Piece = this.GetPiece(pieceId);
+    
+    return piece.GetIsDead();
   }
     
   //===================================================

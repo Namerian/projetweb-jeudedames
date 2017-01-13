@@ -98,19 +98,16 @@ class BoardManagerBehavior extends Sup.Behavior {
             takeAction = takeAction.GetPreviousAction();
           }
           else{
+            destinationIds.push(takeAction.GetOriginId());
             break;
           }
         }
         
         destinationIds = destinationIds.reverse();
         
-        for(let i = 0; i < destinationIds.length; i++){
+        for(let i = 1; i < destinationIds.length; i++){
           let destinationId: number = destinationIds[i];
-          let origin: number = this.selectedAction.GetOriginId();
-          
-          if(i > 0){
-            origin = destinationIds[i-1];
-          }
+          let origin: number = destinationIds[i-1];
           
           this.GetPieceView(this.selectedPieceId).MovePiece(BoardState.GetBoardPos(origin), BoardState.GetBoardPos(destinationId));
         }
@@ -197,6 +194,8 @@ class BoardManagerBehavior extends Sup.Behavior {
         let piecePos: Sup.Math.XY = this.currentBoardState.GetPiecePos(pieceId);
         let pieceOwner: PlayerName = this.currentBoardState.GetPieceOwner(pieceId);
         
+        Sup.log("BoardManager:OnAnimationsDone:pieceId: " + pieceId + " piecePos: " + JSON.stringify(piecePos));
+        
         if(pieceOwner === PlayerName.Black && piecePos.y === 0){
           piece.UpgradeToKing();
           this.currentBoardState.SetPieceIsKing(piece.GetPieceId());
@@ -240,7 +239,7 @@ class BoardManagerBehavior extends Sup.Behavior {
 
       let possibleTakes: Action[] = BoardManagerBehavior.ComputeAllPossibleTakeActions(this.currentPlayer, this.currentBoardState);
 
-      if(this.playerPossibleActions.length === 0){
+      if(possibleTakes.length === 0){
         this.playerPossibleActions = BoardManagerBehavior.ComputePossibleMoveActions(this.currentPlayer, this.currentBoardState.GetCopy());
       }
       else{
@@ -282,9 +281,13 @@ class BoardManagerBehavior extends Sup.Behavior {
     this.selectedPieceId = pieceId;
     this.GetPieceView(pieceId).SelectPiece();
     this.isPieceSelected = true;
+    
+    let piecePos: Sup.Math.XY = this.currentBoardState.GetPiecePos(pieceId);
         
     for(let action of this.playerPossibleActions){
-      if(action.GetPieceId() === pieceId){
+      let actionOrigin: Sup.Math.XY = BoardState.GetBoardPos(action.GetOriginId());
+      
+      if(action.GetPieceId() === pieceId && piecePos.x === actionOrigin.x && piecePos.y === actionOrigin.y){
         this.piecePossibleActions.push(action);
         //Sup.log("BoardManager:SelectPiece:possibleAction:pieceId=" + action.GetPieceId());
       }
@@ -415,6 +418,10 @@ class BoardManagerBehavior extends Sup.Behavior {
     let pieceIds: number[] = boardState.GetPlayerPieceIds(playerName);
     
     for(let pieceId of pieceIds){
+      if(boardState.GetPieceIsDead(pieceId)){
+        continue;
+      }
+      
       let moves: Action[] = BoardManagerBehavior.ComputePossibleMovesForPiece(pieceId, boardState);
       
       if(moves.length > 0){
@@ -493,6 +500,10 @@ class BoardManagerBehavior extends Sup.Behavior {
     let pieceIds: number[] = boardState.GetPlayerPieceIds(playerName);
     
     for(let pieceId of pieceIds){
+      if(boardState.GetPieceIsDead(pieceId)){
+        continue;
+      }
+      
       let takes: Action[] = BoardManagerBehavior.ComputePossibleTakeActions(pieceId, boardState);
       
       if(takes.length > 0){
@@ -554,8 +565,9 @@ class BoardManagerBehavior extends Sup.Behavior {
             
             if(boardState.GetPieceOwner(otherPieceId) !== pieceOwner){
               pieceToTake = otherPieceId;
-              break;
             }
+            
+            break;
           }
         }
       }
@@ -680,7 +692,7 @@ class BoardManagerBehavior extends Sup.Behavior {
       }
     }
     
-    for(let y = 0; y < 4; y++){
+    for(let y = 3; y < 4; y++){
       for(let x = 0; x < BoardState.BOARD_SIZE; x++){
         if(y % 2 === 0 && x % 2 === 0){
           let tileId = BoardState.GetTileId({x:x, y:y});
@@ -697,7 +709,7 @@ class BoardManagerBehavior extends Sup.Behavior {
       }
     }
     
-    for(let y = 6; y < 10; y++){
+    for(let y = 6; y < 7; y++){
       for(let x = 0; x < BoardState.BOARD_SIZE; x++){
         if(y % 2 === 0 && x % 2 === 0){
           let tileId = BoardState.GetTileId({x:x, y:y});
